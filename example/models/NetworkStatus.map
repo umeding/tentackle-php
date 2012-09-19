@@ -1,0 +1,30 @@
+## 
+## Network status details
+##
+Timestamp	0	when				ts				When we collected the details
+
+String 		80	interfaceName		if_name			Network interface name
+
+## Rx
+long		11	rxTotalBytes		rx_tot_bytes	Number of bytes
+long		11	rxRelativeBytes		rx_rel_bytes	Number of bytes
+long		11	rxPackets			rx_packets		Number of packets
+long		11	rxErrors			rx_errs			Number of errors
+long		11	rxDrop				rx_drop			Number dropped
+
+## Tx
+long		11	txTotalBytes		tx_tot_bytes	Number of bytes
+long		11	txRelativeBytes		tx_rel_bytes	Number of bytes
+long		11	txPackets			tx_packets		Number of packets
+long		11	txErrors			tx_errs			Number of errors
+long		11	txDrop				tx_drop			Number dropped
+
+String		10	bootProtocol		boot_as			Advertised boot protocol
+
+String		20	hwAddr				hw_addr			Hardware address (MAC)
+String 		20	ipAddr				ip_addr			IP address
+String		20	gateway				gateway			Network gateway address
+String		40	hostname			hostname		Host name
+
+String		80	dnsSearchDomains	dns_search		DNS search domains
+String		80	dnsNameServers		dns_nameservers	DNS name servers

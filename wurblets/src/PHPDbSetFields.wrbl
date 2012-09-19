@@ -1,0 +1,32 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> PHPDbSetFields <modelname>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+    
+]@
+        $ndx = 0;
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $fieldName = "self::\$FIELD_".strtoupper($attr['name']);
+            $colName = "self::\$COLUMN_".strtoupper($attr['name']);
+]@
+        $st->setValue(++$ndx, $this->@($attr['name'])@);
+@[
+        }
+    }
+]@
+        $st->setValue(++$ndx, $this->getId());
+        $st->setValue(++$ndx, $this->getSerial());
+@[
+]@
+@[/*?>*/]@

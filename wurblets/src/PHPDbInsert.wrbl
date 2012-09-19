@@ -1,0 +1,51 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> PHPDbInsert <modelname>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+    
+]@
+        $stmtId = $this->getInsertStatementId();
+        if($stmtId == 0) {
+            $stmtId = $this->getDb()->prepareStatement(
+                    "INSERT INTO "
+                    .$this->getTableName()
+                    .' ('
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $fieldName = "self::\$FIELD_".strtoupper($attr['name']);
+]@
+                    .@($fieldName)@.','
+@[
+        }
+    }
+]@
+                    .DbObject::$FIELD_ID.','
+                    .DbObject::$FIELD_SERIAL
+                    .') VALUES ('
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $fieldName = "self::\$FIELD_".strtoupper($attr['name']);
+]@
+                    .'?, ' 
+@[
+        }
+    }
+]@
+                    .'?, ' 
+                    .'?)');
+                $this->setInsertStatementId($stmtId);
+        }
+@[
+]@
+@[/*?>*/]@

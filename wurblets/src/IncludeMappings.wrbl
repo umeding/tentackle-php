@@ -1,0 +1,51 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+    $guardname = $this->getContainer()->getProperty("wurblet", "guardname");
+
+    if($this->haveParameter('line-comment')) {
+        $lineComment = $this->getParameter('line-comment');
+        $startComment = $lineComment;
+        $endComment = $lineComment;
+    } else {
+        // assume C-style comments
+        $lineComment = " *";
+        $startComment = "/*";
+        $endComment = " */";
+    }
+
+]@
+@($startComment)@
+@($lineComment)@ \@> @($guardname)@
+@[
+    $ac = $this->getArgCount();
+    for($i = 0; $i < $ac; $i++) {
+        $modelname = $this->getArg($i);
+]@
+@($lineComment)@ # ======>>>> @($modelname)@
+@[
+        $fp = WurbUtil::openReader($modelname);
+        while(!feof($fp)) {
+            $line = fgets($fp, 250);
+            $line = trim($line);
+            // drop ## lines they are not meant for here
+            if(0 == strcmp("##", "".substr($line,0,2)))
+                continue;
+            // Massage the various styles we may have
+            if(isset($line[0]) && $line[0] == '.')
+                $line = "# { ".substr($line, 1)." }";
+            if(isset($line[0]) && $line[0] == '{')
+                $line = "# ".$line;
+]@
+@($lineComment)@ @($line)@
+@[
+        }
+        fclose($fp);
+    }
+]@
+@($lineComment)@ \@<
+@($endComment)@
+@[
+]@
+@[/*?>*/]@

@@ -1,0 +1,51 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> PHPFieldNames <modelname>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+    
+    // ============== TO JSON =====================================
+]@
+    /**
+     * Create a JSON compatible object
+     * \@return a JSON compatible object
+     */
+    public function toJSON() {
+        $jsonFields = array();
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+]@
+        $jsonFields['@($attr['name'])@'] = $this->get@(ucfirst($attr['name']))@();
+@[
+        }
+    }
+]@
+        return json_encode($jsonFields);
+    }
+
+    /**
+     * Extract from a JSON compatible object
+     * \@return a JSON compatible object
+     */
+    public function fromJSON($json) {
+        $arr = json_decode($json, true);
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+]@
+        $this->set@(ucfirst($attr['name']))@($arr['@($attr['name'])@']);
+@[
+        }
+    }
+]@
+    }
+@[/*?>*/]@

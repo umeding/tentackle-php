@@ -1,0 +1,29 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> PHPDeclare <modelname>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+    
+]@
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $type = $model->getMappedDataType($attr['type'], 'php');
+            $line = sprintf("%-10s %-20s %s", $type, $attr['name'], $attr['comment']);
+]@
+    private $@($attr['name'])@;
+@[
+        }
+    }
+]@
+@[
+]@
+@[/*?>*/]@

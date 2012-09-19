@@ -1,0 +1,52 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> SQLCreateTable <modelname>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+    
+    if($this->haveParameter('fieldAccess')) {
+        $fieldAccess = $this->getParameter('fieldAccess');
+    } else {
+        $fieldAccess = "private";
+    }
+
+    if($this->haveParameter('dialect')) {
+        $dialect = $this->getParameter('dialect');
+    } else {
+        $dialect = "mysql";
+    }
+
+    $format = "%15s %-15s NOT NULL, -- %s";
+    $id_type = $model->getMappedDataType('long', $dialect).'(20)';
+    $id_line = sprintf($format, 'id', $id_type, 'Record key');
+    $serial_type = $model->getMappedDataType('long', $dialect).'(20)';
+    $serial_line = sprintf($format, 'serial', $serial_type, 'Record serial');
+]@
+CREATE TABLE `@($this->getGuardName())@` (
+    @($id_line)@
+    @($serial_line)@
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $type_name = $model->getMappedDataType($attr['type'], $dialect);
+            $type_len = $attr['length'] == 0 ? '' : '('.$attr['length'].')';
+            $type = "$type_name$type_len";
+            $line = sprintf($format, '`'.$attr['dbname'].'`', $type, $attr['comment']);
+]@
+    @($line)@
+@[
+        }
+    }
+]@
+    PRIMARY KEY (id));
+@[
+]@
+@[/*?>*/]@

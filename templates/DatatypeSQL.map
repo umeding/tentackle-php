@@ -1,0 +1,23 @@
+##
+## SQL datatypes
+##
+
+## MySQL dialect
+# { mysql(boolean) type(TINYINT) }
+# { mysql(byte) type(TINYINT) }
+# { mysql(char) type(CHAR) }
+# { mysql(character) type(CHAR) }
+# { mysql(short) type(SMALLINT) }
+# { mysql(int) type(INT) }
+# { mysql(long) type(BIGINT) }
+# { mysql(float) type(FLOAT) }
+# { mysql(double) type(DOUBLE) }
+# { mysql(date) type(DATE) }
+# { mysql(time) type(DATETIME) }
+# { mysql(timestamp) type(DATETIME) }
+
+# { mysql(String) type(VARCHAR) }
+# { mysql(binary) type(BLOB) }
+
+## Oracle dialect
+## @todo

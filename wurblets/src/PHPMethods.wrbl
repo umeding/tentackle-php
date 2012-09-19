@@ -1,0 +1,44 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $noctor = false;
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> PHPMethods <modelname>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    if($this->haveParameter('noctor')) {
+        $noctor = true;
+    }
+    
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+]@
+    /**
+     * Get the @($attr['comment'])@ field
+     * \@return @($attr['comment'])@
+     */
+    public function get@(ucfirst($attr['name']))@() {
+        return $this->@($attr['name'])@;
+    }
+
+    /**
+     * Set the @($attr['comment'])@ field
+     * \@param @($attr['name'])@ is the @($attr['comment'])@
+     */
+    public function set@(ucfirst($attr['name']))@($@($attr['name'])@) {
+        $this->@($attr['name'])@ = $@($attr['name'])@;
+    }
+@[
+        }
+    }
+]@
+@[
+]@
+@[/*?>*/]@

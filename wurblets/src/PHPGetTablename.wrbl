@@ -1,0 +1,22 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> PHPGetTablename TABLENAME");
+
+    $tablename = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+]@
+    /**
+     * Get the database tablename
+     * \@return the database table name
+     */
+    public function getTableName() {
+        return "@($tablename)@";
+    }
+@[
+]@
+@[/*?>*/]@

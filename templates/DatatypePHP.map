@@ -1,0 +1,20 @@
+##
+## PHP datatype maps
+##
+
+## { php defaultThrows(Exception) }
+
+# { php(String) type(var) }
+# { php(byte) type(var) }
+# { php(boolean) type(var) }
+# { php(short) type(var) }
+# { php(int) type(var) }
+# { php(long) type(var) }
+# { php(float) type(var) }
+# { php(double) type(var) }
+# { php(Timestamp) type(var) }
+# { php(IdList) type(var) }
+# { php(ByteList) type(var) }
+# { php(IntList) type(var) }
+# { php(StringList) type(var) }
+

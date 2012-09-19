@@ -1,0 +1,40 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac != 1)
+        throw new Exception("usage: wurblet <guard> PHPDbUpdate <modelname>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+    
+]@
+        $stmtId = $this->getUpdateStatementId();
+        if($stmtId == 0) {
+            $stmtId = $this->getDb()->prepareStatement(
+                    "UPDATE "
+                    .$this->getTableName()
+                    .' SET '
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $fieldName = "self::\$FIELD_".strtoupper($attr['name']);
+]@
+                    .@($fieldName)@.'=?,'
+@[
+        }
+    }
+]@
+                    .DbObject::$FIELD_SERIAL."=".DbObject::$FIELD_SERIAL."+1"
+                    .' WHERE ' .DbObject::$FIELD_ID.'=?'
+                    .' AND '.DbObject::$FIELD_SERIAL.'=?'
+                    );
+                $this->setUpdateStatementId($stmtId);
+        }
+@[
+]@
+@[/*?>*/]@

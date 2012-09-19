@@ -1,0 +1,82 @@
+@[/* vim: set filetype=php :*/]@
+@[/*<?php*/]@
+@{extends AbstractFlex}@
+@[
+
+    $ac = $this->getArgCount();
+    if($ac <= 1)
+        throw new Exception("usage: wurblet <guard> PHPDbDeleteUnique <modelname> <key1...keyn>");
+
+    $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
+
+    // fetch the model
+    $model = $this->newGeneric4ColModelInstance($modelFile);
+
+    $scope = $this->haveParameter('private') ? 'private' : 'public';
+    $operation = $this->haveParameter('or') ? ' OR' : 'AND';
+
+    if($this->haveParameter('sql')) {
+        $sql = $this->getParameter('sql');
+    } else {
+        $sql = null;
+    }
+
+
+    $methodName = $this->getGuardName();
+    $stmtIdName = $this->getGuardName()."StatementId";
+
+    $keys = array();
+    for($i = 1; $i < $this->getArgCount(); $i++) {
+        $name = $this->getArg($i);
+        if($model->findAttribute($name) == null) {
+            throw new Exception($name.": attribute not found");
+        }
+        $keys[] = $this->getArg($i);
+    }
+
+    $fieldNames = array_map(create_function('$a', 'return "self::\$FIELD_".strtoupper($a);'), $keys);
+    $phpFieldNames = array_map(create_function('$a', 'return "$".$a;'), $keys);
+
+]@
+    @($scope)@ function @($methodName)@(@(implode(',',$phpFieldNames))@) {
+        $stmtId = self::$@($stmtIdName)@;
+        if($stmtId == 0) {
+@[
+    // handle sql option
+    if($sql == null) {
+]@
+            $sql = "DELETE FROM ".$this->getTableName();
+@[
+        $delimKW = " WHERE ";
+        foreach($fieldNames as $fieldName) {
+]@
+            $sql .= "@($delimKW)@".@($fieldName)@."=?";
+@[
+            $delimKW = "   $operation ";
+        }
+    } else {
+]@
+            $sql = "DELETE FROM ".$this->getTableName()." WHERE ".@($sql)@;
+@[
+    }
+
+]@
+            
+            $stmtId = $this->getDb()->prepareStatement($sql);
+            self::$@($stmtIdName)@ = $stmtId;
+        }
+        $ps = $this->getDb()->getPreparedStatement($stmtId);
+        $ndx = 1;
+@[
+    foreach($phpFieldNames as $fieldName) {
+]@
+        $ps->setValue($ndx++, @($fieldName)@);
+@[
+    }
+]@
+        return $ps->executeUpdate();
+    }
+    private static $@($stmtIdName)@ = 0;
+@[
+]@
+@[/*?>*/]@
