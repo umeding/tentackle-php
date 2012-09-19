@@ -8,8 +8,9 @@ set_include_path("..");
 require_once("tentackle/tentackle.php");
 require_once("NetworkStatus.php");
 
-
-$dburl = "mysql://outsmart:outsmart@localhost/uwe";
+// Configure the URL to your needs, and remove the following line
+die("\n*** Must configure the database URL\n\n");
+$dburl = "mysql://DBNAME:DBPASS@localhost/DBNAME";
 
 $db = TentackleFactory::fromURL($dburl)->newDb();
 
