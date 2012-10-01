@@ -40,6 +40,14 @@ class DbObject {
 	}
 
 	/**
+	 * Set the database connection
+	 * @param $db is the database connection
+	 */
+	public function setDb(Db $db) {
+		$this->db = $db;
+	}
+
+	/**
 	 * Get the SQL text to retrieve all objects
 	 * @return the sql text 
 	 */
