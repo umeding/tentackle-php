@@ -10,8 +10,8 @@ class PHPDbSelectList extends AbstractFlex {
 
 /* vim: set filetype=php :*//*<?php*/
     $ac = $this->getArgCount();
-    if($ac <= 1)
-        throw new Exception("usage: wurblet <guard> PHPDbSelectList <modelname> <key1...keyn> [-append=APPEND] [-sql=SQL] [-limit] [-offset]");
+    if($ac < 1)
+        throw new Exception("usage: wurblet <guard> PHPDbSelectList <modelname> [key1...keyn] [-append=APPEND] [-sql=SQL] [-limit] [-offset]");
 
     $modelFile = WurbUtil::translateVars($this->getArg(0), $this->getContainer()->getProperties(PROPSPACE_WURBLET));
 

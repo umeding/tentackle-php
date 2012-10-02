@@ -22,11 +22,21 @@ class PHPDbGetFields extends AbstractFlex {
         if(!isset($attr['nomethod'])) {
             $fieldName = "self::\$FIELD_".strtoupper($attr['name']);
             $colName = "self::\$COLUMN_".strtoupper($attr['name']);
+
+            switch($attr['type']) {
+            case 'Timestamp':
+                $assignment = 'Timestamp::valueOf($rs->getValueByName('.$fieldName.'))';
+                break;
+
+            default:
+                $assignment = '$rs->getValueByName('.$fieldName.')';
+                break;
+            }
             fwrite($this->out,$this->source[0]); //  $this->
             fwrite($this->out,$attr['name']);
-            fwrite($this->out,$this->source[1]); //  = $rs->getValueByNa...
-            fwrite($this->out,$fieldName);
-            fwrite($this->out,$this->source[2]); // ); 
+            fwrite($this->out,$this->source[1]); //  = 
+            fwrite($this->out,$assignment);
+            fwrite($this->out,$this->source[2]); // ; 
         }
     }
     fwrite($this->out,$this->source[3]); //  $this->setId($rs->g...

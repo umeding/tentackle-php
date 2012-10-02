@@ -23,8 +23,18 @@ class PHPDbSetFields extends AbstractFlex {
         if(!isset($attr['nomethod'])) {
             $fieldName = "self::\$FIELD_".strtoupper($attr['name']);
             $colName = "self::\$COLUMN_".strtoupper($attr['name']);
+
+            switch($attr['type']) {
+                case 'Timestamp':
+                    $getvar = '$this->'.$attr['name'].'?$this->'.$attr['name'].'->getSQLDate() : \'0000-00-00 00:00:00\'';
+                    break;
+
+                default:
+                    $getvar = '$this->'.$attr['name'];
+                    break;
+            }
             fwrite($this->out,$this->source[1]); //  $st->setValue(++$nd...
-            fwrite($this->out,$attr['name']);
+            fwrite($this->out,$getvar);
             fwrite($this->out,$this->source[2]); // ); 
         }
     }

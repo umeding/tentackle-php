@@ -25,29 +25,39 @@ class PHPMethods extends AbstractFlex {
 
     foreach($model->getAttributeList() as $attr) {
         if(!isset($attr['nomethod'])) {
-          fwrite($this->out,$this->source[0]); //  /** * Get the 
-          fwrite($this->out,$attr['comment']);
-          fwrite($this->out,$this->source[1]); //  field * @return 
-          fwrite($this->out,$attr['comment']);
-          fwrite($this->out,$this->source[2]); //  */ public function ...
-          fwrite($this->out,ucfirst($attr['name']));
-          fwrite($this->out,$this->source[3]); // () { return $this->
-          fwrite($this->out,$attr['name']);
-          fwrite($this->out,$this->source[4]); // ; } /** * Set the 
-          fwrite($this->out,$attr['comment']);
-          fwrite($this->out,$this->source[5]); //  field * @param 
-          fwrite($this->out,$attr['name']);
-          fwrite($this->out,$this->source[6]); //  is the 
-          fwrite($this->out,$attr['comment']);
-          fwrite($this->out,$this->source[7]); //  */ public function ...
-          fwrite($this->out,ucfirst($attr['name']));
-          fwrite($this->out,$this->source[8]); // ($
-          fwrite($this->out,$attr['name']);
-          fwrite($this->out,$this->source[9]); // ) { $this->
-          fwrite($this->out,$attr['name']);
-          fwrite($this->out,$this->source[10]); //  = $
-          fwrite($this->out,$attr['name']);
-          fwrite($this->out,$this->source[11]); // ; } 
+            switch($attr['type']) {
+                case 'Timestamp':
+                    $datatype_name = 'Timestamp $'.$attr['name'];
+                    $datatype_instance = 'new Timestamp';
+                    break;
+                default:
+                    $datatype_name = '$'.$attr['name'];
+                    $datatype_instance = '';
+                    break;
+            }
+            fwrite($this->out,$this->source[0]); //  /** * Get the 
+            fwrite($this->out,$attr['comment']);
+            fwrite($this->out,$this->source[1]); //  field * @return 
+            fwrite($this->out,$attr['comment']);
+            fwrite($this->out,$this->source[2]); //  */ public function ...
+            fwrite($this->out,ucfirst($attr['name']));
+            fwrite($this->out,$this->source[3]); // () { return $this->
+            fwrite($this->out,$attr['name']);
+            fwrite($this->out,$this->source[4]); // ; } /** * Set the 
+            fwrite($this->out,$attr['comment']);
+            fwrite($this->out,$this->source[5]); //  field * @param 
+            fwrite($this->out,$attr['name']);
+            fwrite($this->out,$this->source[6]); //  is the 
+            fwrite($this->out,$attr['comment']);
+            fwrite($this->out,$this->source[7]); //  */ public function ...
+            fwrite($this->out,ucfirst($attr['name']));
+            fwrite($this->out,$this->source[8]); // (
+            fwrite($this->out,$datatype_name);
+            fwrite($this->out,$this->source[9]); // ) { $this->
+            fwrite($this->out,$attr['name']);
+            fwrite($this->out,$this->source[10]); //  = $
+            fwrite($this->out,$attr['name']);
+            fwrite($this->out,$this->source[11]); // ; } 
         }
     }
 /*?>*/

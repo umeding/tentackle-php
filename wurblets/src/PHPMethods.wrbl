@@ -19,6 +19,16 @@
 
     foreach($model->getAttributeList() as $attr) {
         if(!isset($attr['nomethod'])) {
+            switch($attr['type']) {
+                case 'Timestamp':
+                    $datatype_name = 'Timestamp $'.$attr['name'];
+                    $datatype_instance = 'new Timestamp';
+                    break;
+                default:
+                    $datatype_name = '$'.$attr['name'];
+                    $datatype_instance = '';
+                    break;
+            }
 ]@
     /**
      * Get the @($attr['comment'])@ field
@@ -32,7 +42,7 @@
      * Set the @($attr['comment'])@ field
      * \@param @($attr['name'])@ is the @($attr['comment'])@
      */
-    public function set@(ucfirst($attr['name']))@($@($attr['name'])@) {
+    public function set@(ucfirst($attr['name']))@(@($datatype_name)@) {
         $this->@($attr['name'])@ = $@($attr['name'])@;
     }
 @[

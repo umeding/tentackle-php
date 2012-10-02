@@ -18,8 +18,18 @@
         if(!isset($attr['nomethod'])) {
             $fieldName = "self::\$FIELD_".strtoupper($attr['name']);
             $colName = "self::\$COLUMN_".strtoupper($attr['name']);
+
+            switch($attr['type']) {
+            case 'Timestamp':
+                $assignment = 'Timestamp::valueOf($rs->getValueByName('.$fieldName.'))';
+                break;
+
+            default:
+                $assignment = '$rs->getValueByName('.$fieldName.')';
+                break;
+            }
 ]@
-        $this->@($attr['name'])@ = $rs->getValueByName(@($fieldName)@);
+        $this->@($attr['name'])@ = @($assignment)@;
 @[
         }
     }
