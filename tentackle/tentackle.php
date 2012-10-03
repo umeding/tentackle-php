@@ -13,6 +13,7 @@ require_once('tentackle/ResultSet.php');
 require_once('tentackle/Db.php');
 require_once('tentackle/IdSource.php');
 require_once('tentackle/DbObject.php');
+require_once('tentackle/Timestamp.php');
 
 /**
  * The tentackle interface 

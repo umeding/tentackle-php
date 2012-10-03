@@ -23,14 +23,21 @@
             switch($attr['type']) {
                 case 'Timestamp':
                     $getvar = '$this->'.$attr['name'].'?$this->'.$attr['name'].'->getSQLDate() : \'0000-00-00 00:00:00\'';
+                    $setfunc = 'setValue';
+                    break;
+
+                case 'String':
+                    $getvar = '$this->'.$attr['name'];
+                    $setfunc = 'setStringValue';
                     break;
 
                 default:
                     $getvar = '$this->'.$attr['name'];
+                    $setfunc = 'setValue';
                     break;
             }
 ]@
-        $st->setValue(++$ndx, @($getvar)@);
+        $st->@($setfunc)@(++$ndx, @($getvar)@);
 @[
         }
     }

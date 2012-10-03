@@ -47,6 +47,23 @@ class PreparedStatement extends Statement {
 			$this->stmt = implode(' ', $mapped);
 		}
 	}
+
+    /*
+	 * Set a string value at a position
+	 * @param type $pos the position
+	 * @param type $value  the value
+	 */
+	public function setStringValue($pos, $value) {
+		if (isset($this->subs[$pos])) {
+			// Save the substition
+			$this->subs[$pos] = "'" . mysql_real_escape_string($value) . "'";
+
+			// Do the substition
+			$mapped = array_map(
+					create_function('$a,$b', 'return "$a$b";'), $this->format, $this->subs);
+			$this->stmt = implode(' ', $mapped);
+		}
+	}
 }
 
 ?>

@@ -27,18 +27,27 @@ class PHPDbSetFields extends AbstractFlex {
             switch($attr['type']) {
                 case 'Timestamp':
                     $getvar = '$this->'.$attr['name'].'?$this->'.$attr['name'].'->getSQLDate() : \'0000-00-00 00:00:00\'';
+                    $setfunc = 'setValue';
+                    break;
+
+                case 'String':
+                    $getvar = '$this->'.$attr['name'];
+                    $setfunc = 'setStringValue';
                     break;
 
                 default:
                     $getvar = '$this->'.$attr['name'];
+                    $setfunc = 'setValue';
                     break;
             }
-            fwrite($this->out,$this->source[1]); //  $st->setValue(++$nd...
+            fwrite($this->out,$this->source[1]); //  $st->
+            fwrite($this->out,$setfunc);
+            fwrite($this->out,$this->source[2]); // (++$ndx, 
             fwrite($this->out,$getvar);
-            fwrite($this->out,$this->source[2]); // ); 
+            fwrite($this->out,$this->source[3]); // ); 
         }
     }
-    fwrite($this->out,$this->source[3]); //  $st->setValue(++$nd...
+    fwrite($this->out,$this->source[4]); //  $st->setValue(++$nd...
 /*?>*/
   }
 }
