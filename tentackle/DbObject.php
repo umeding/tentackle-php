@@ -16,19 +16,13 @@ class DbObject {
 	var $id;
 	var $serial;
 	private $db;
-	// This is static so we can reuse the same statements multiple times
-	private static $insertStmtId;
-	private static $updateStmtId;
-	private static $selectStmtId;
-	private static $selectAllStmtId;
-	private static $deleteStmtId;
-	private static $selectSerialStmtId;
-	private static $updateSerialStmtId;
+	private $classVars;
 
 	public function __construct($db = NULL) {
 		$this->db = $db;
 		$this->id = 0;
 		$this->serial = 0;
+		$this->classVars = $this->getClassVariables();
 	}
 
 	/**
@@ -60,7 +54,7 @@ class DbObject {
 	 * @return the insert statement id 
 	 */
 	public function getInsertStatementId() {
-		return self::$insertStmtId;
+		return $this->classVars->insertStmtId;
 	}
 
 	/**
@@ -68,7 +62,7 @@ class DbObject {
 	 * @param $stmtId is the insert statement id
 	 */
 	public function setInsertStatementId($stmtId) {
-		self::$insertStmtId = $stmtId;
+		$this->classVars->insertStmtId = $stmtId;
 	}
 
 	/**
@@ -76,7 +70,7 @@ class DbObject {
 	 * @return the update statement id
 	 */
 	public function getUpdateStatementId() {
-		return self::$updateStmtId;
+		return $this->classVars->updateStmtId;
 	}
 
 	/**
@@ -84,7 +78,7 @@ class DbObject {
 	 * @param $stmtId the update statement identifier
 	 */
 	public function setUpdateStatementId($stmtId) {
-		self::$updateStmtId = $stmtId;
+		$this->classVars->updateStmtId = $stmtId;
 	}
 
 	/**
@@ -92,7 +86,7 @@ class DbObject {
 	 * @return select statement id 
 	 */
 	public function getSelectStatementId() {
-		return self::$selectStmtId;
+		return $this->classVars->selectStmtId;
 	}
 
 	/**
@@ -100,7 +94,7 @@ class DbObject {
 	 * @param $stmtId the select statement id
 	 */
 	public function setSelectStatementId($stmtId) {
-		self::$selectStmtId = $stmtId;
+		$this->classVars->selectStmtId = $stmtId;
 	}
 
 	/**
@@ -123,7 +117,7 @@ class DbObject {
 	 * @return select statement id 
 	 */
 	public function getSelectAllStatementId() {
-		return self::$selectAllStmtId;
+		return $this->classVars->selectAllStmtId;
 	}
 
 	/**
@@ -131,7 +125,7 @@ class DbObject {
 	 * @param $stmtId the select statement id
 	 */
 	public function setSelectAllStatementId($stmtId) {
-		self::$selectAllStmtId = $stmtId;
+		$this->classVars->selectAllStmtId = $stmtId;
 	}
 
 	/**
@@ -154,7 +148,7 @@ class DbObject {
 	 * @return select statement id 
 	 */
 	public function getSelectSerialStatementId() {
-		return self::$selectSerialStmtId;
+		return $this->classVars->selectSerialStmtId;
 	}
 
 	/**
@@ -162,7 +156,7 @@ class DbObject {
 	 * @param $stmtId the select statement id
 	 */
 	public function setSelectSerialStatementId($stmtId) {
-		self::$selectSerialStmtId = $stmtId;
+		$this->classVars->selectSerialStmtId = $stmtId;
 	}
 
 	/**
@@ -185,7 +179,7 @@ class DbObject {
 	 * @return select statement id 
 	 */
 	public function getUpdateSerialStatementId() {
-		return self::$updateSerialStmtId;
+		return $this->classVars->updateSerialStmtId;
 	}
 
 	/**
@@ -193,7 +187,7 @@ class DbObject {
 	 * @param $stmtId the update statement id
 	 */
 	public function setUpdateSerialStatementId($stmtId) {
-		self::$updateSerialStmtId = $stmtId;
+		$this->classVars->updateSerialStmtId = $stmtId;
 	}
 
 	/**
@@ -216,7 +210,7 @@ class DbObject {
 	 * @return the delete statement id 
 	 */
 	public function getDeleteStatementId() {
-		return self::$deleteStmtId;
+		return $this->classVars->deleteStmtId;
 	}
 
 	/**
@@ -224,7 +218,7 @@ class DbObject {
 	 * @param $stmtId the delete statement identifier
 	 */
 	public function setDeleteStatementId($stmtId) {
-		self::$deleteStmtId = $stmtId;
+		$this->classVars->deleteStmtId = $stmtId;
 	}
 
 	public function prepareDeleteStatement() {
@@ -274,8 +268,10 @@ class DbObject {
 	 * @param $id is the row id
 	 */
 	public function select($id) {
+		var_dump($this);
 		$ps = $this->db->getPreparedStatement($this->prepareSelectStatement());
 		$ps->setValue(1, $id);
+		var_dump($ps);
 		$rs = $ps->executeQuery();
 		try {
 			if ($rs->next()) {

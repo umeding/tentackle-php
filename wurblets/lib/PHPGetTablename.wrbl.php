@@ -17,7 +17,9 @@ class PHPGetTablename extends AbstractFlex {
 
     fwrite($this->out,$this->source[0]); //  /** * Get the datab...
     fwrite($this->out,$tablename);
-    fwrite($this->out,$this->source[1]); // "; } 
+    fwrite($this->out,$this->source[1]); // '; } /** * Get the c...
+    fwrite($this->out,$tablename);
+    fwrite($this->out,$this->source[2]); // '); } return self::$...
 /*?>*/
   }
 }

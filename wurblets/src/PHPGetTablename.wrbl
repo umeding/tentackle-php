@@ -15,8 +15,20 @@
      * \@return the database table name
      */
     public function getTableName() {
-        return "@($tablename)@";
+        return '@($tablename)@';
     }
+
+    /**
+     * Get the class variables
+     * \@return the class variables
+     */
+    public function getClassVariables() {
+        if(!self::$classVariables) {
+            self::$classVariables = new DbObjectClassVariables(__CLASS__, '@($tablename)@');
+        }
+        return self::$classVariables;
+    }
+    private static $classVariables;
 @[
 ]@
 @[/*?>*/]@
