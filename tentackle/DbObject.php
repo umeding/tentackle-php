@@ -268,10 +268,8 @@ class DbObject {
 	 * @param $id is the row id
 	 */
 	public function select($id) {
-		var_dump($this);
 		$ps = $this->db->getPreparedStatement($this->prepareSelectStatement());
 		$ps->setValue(1, $id);
-		var_dump($ps);
 		$rs = $ps->executeQuery();
 		try {
 			if ($rs->next()) {
