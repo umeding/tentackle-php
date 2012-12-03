@@ -32,6 +32,20 @@ class PHPDbFieldNames extends AbstractFlex {
             fwrite($this->out,$this->source[4]); // ; 
         }
     }
+    fwrite($this->out,$this->source[5]); //  /** * Get a field v...
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $type = $model->getMappedDataType($attr['type'], 'php');
+            $line = sprintf("%-10s %-20s %s", $type, $attr['name'], $attr['comment']);
+
+            fwrite($this->out,$this->source[6]); //  case '
+            fwrite($this->out,$attr['name']);
+            fwrite($this->out,$this->source[7]); // ': return $this->
+            fwrite($this->out,$attr['name']);
+            fwrite($this->out,$this->source[8]); // ; 
+        }
+    }
+    fwrite($this->out,$this->source[9]); //  default: throw new ...
 /*?>*/
   }
 }

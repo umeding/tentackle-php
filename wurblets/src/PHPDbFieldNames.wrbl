@@ -28,6 +28,32 @@
         }
     }
 ]@
+
+    /**
+     * Get a field value by name
+     * \@param $fieldName is the field name
+     */
+    public function getFieldValue($fieldName) {
+        switch($fieldName) {
+@[
+    foreach($model->getAttributeList() as $attr) {
+        if(!isset($attr['nomethod'])) {
+            $type = $model->getMappedDataType($attr['type'], 'php');
+            $line = sprintf("%-10s %-20s %s", $type, $attr['name'], $attr['comment']);
+
+]@
+        case '@($attr['name'])@':
+             return $this->@($attr['name'])@;
+@[
+]@
+@[
+        }
+    }
+]@
+        default:
+             throw new Exception($fieldName.": field name not found");
+        }
+    }
 @[
 ]@
 @[/*?>*/]@
